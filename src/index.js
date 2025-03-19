@@ -11,8 +11,11 @@ const methodOverride = require('method-override')
 
 //Connect to db
 db.connect();
+
 app.use(methodOverride('_method'))
+
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(
     express.urlencoded({
         extended: true,
