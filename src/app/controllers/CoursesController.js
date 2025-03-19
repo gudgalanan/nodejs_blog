@@ -73,6 +73,40 @@ class CoursesController {
                 res.redirect('/me/stored/courses/');
             }).catch(err => { next(err); })
     }
+
+    //[POST] /courses/handle-form
+    handleForm(req, res, next) {
+        switch (req.body.action) {
+            case 'delete':
+                Course.delete({ _id: { $in: req.body.courseIds } })
+                    .then(() => {
+                        res.redirect('/me/stored/courses/');
+                    }).catch(err => { next(err); })
+                break;
+            default:
+                res.json({ message: 'Invalid action' })
+        }
+    }
+
+    //[POST] /courses/deleted/handle-form
+    handleDeletedForm(req, res, next) {
+        switch (req.body.action) {
+            case 'delete':
+                Course.deleteOne({ _id: { $in: req.body.courseIds } })
+                    .then(() => {
+                        res.redirect('/me/stored/courses/');
+                    }).catch(err => { next(err); })
+                break;
+            case 'restore':
+                Course.restore({ _id: { $in: req.body.courseIds } })
+                    .then(() => {
+                        res.redirect('/me/stored/courses/');
+                    }).catch(err => { next(err); })
+                break;
+            default:
+                res.json({ message: 'Invalid action' })
+        }
+    }
 }
 
 module.exports = new CoursesController();

@@ -1,10 +1,26 @@
-<div class="mt-4">
+<form name="container-form" method="post" action="/courses/handle-form" class="mt-4">
     <h3>My courses</h3>
     <a href="/me/trash/courses">My deleted courses ({{deletedCount}})</a>
+    <div class="d-flex align-items-center mt-4">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="checkbox-all">
+            <label class="form-check-label" for="checkbox-all">
+                Choose all courses
+            </label>
+        </div>
+
+        <select class="form-control select-all-options" name="action" required>
+            <option value="">--Choose action</option>
+            <option value="delete">Delete</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary btn-sm  btn-apply-submit" disabled>Apply</button>
+    </div>
     <table class="table mt-4">
         <thead>
             <tr>
                 <th scope="col">#</th>
+                <th scope="col">No.</th>
                 <th scope="col">Name</th>
                 <th scope="col">Created At</th>
                 <th scope="col">Updated At</th>
@@ -15,6 +31,11 @@
         <tbody>
             {{#each courses}}
             <tr>
+                <td>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value={{this._id}} name="courseIds[]">
+                    </div>
+                </td>
                 <th scope="row">{{sum @index 1}}</th>
                 <td>{{this.name}}</td>
                 <td>{{this.createdAt}}</td>
@@ -54,4 +75,47 @@
             {{/each }}
         </tbody>
     </table>
-</div>
+</form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var containerForm = $('form[name="container-form"]')
+        var checkboxAll = $('#checkbox-all');
+        var courseItemcheckbox = $('input[name="courseIds[]"]');
+        var applySubmitBtn = $('.btn-apply-submit');
+
+        //Checkbox all clicked
+        checkboxAll.change(function () {
+            var isCheckedAll = $(this).prop('checked')
+            courseItemcheckbox.prop('checked', isCheckedAll)
+            reRenderApplySubmitBtn()
+        });
+
+        //Course item checkbox changed
+        courseItemcheckbox.change(function () {
+            var isAllChecked = courseItemcheckbox.length === courseItemcheckbox.filter(':checked').length;
+            checkboxAll.prop('checked', isAllChecked);
+            reRenderApplySubmitBtn()
+        });
+
+        //Re-render the Apply button
+        function reRenderApplySubmitBtn() {
+            var checkedCount = courseItemcheckbox.filter(':checked').length;
+            if (checkedCount > 0) {
+                applySubmitBtn.attr("disabled", false)
+            } else {
+                applySubmitBtn.attr("disabled", true)
+            }
+        }
+
+        //Apply submit btn clicked
+        //  containerForm.on('submit', function (e) {
+        //    var isSubmittable = !applySubmitBtn.hasClass("disabled");
+        //  if (!isSubmittable) {
+        //    e.preventDefault();
+        // } else {
+        //              containerForm.submit();
+        //        }
+        //  });
+    })
+</script>

@@ -1,7 +1,7 @@
-@import 'variables';
+@use 'variables' as vars;
 
 h1 {
-    color: $red-color;
+    color: vars.$red-color;
 }
 
 h2 {
@@ -11,4 +11,9 @@ h2 {
 .course-logo {
     height: 130px;
     object-fit: cover;
+}
+
+.select-all-options {
+    width: 160px;
+    margin: 0 16px;
 }
