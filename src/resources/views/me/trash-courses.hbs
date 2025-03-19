@@ -1,11 +1,11 @@
 <div class="mt-4">
-    <h3>My courses</h3>
+    <h3>My deleted courses</h3>
     <table class="table mt-4">
         <thead>
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
-                <th scope="col">Created At</th>
+                <th scope="col">Deleted At</th>
                 <th scope="col">Updated At</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
@@ -16,13 +16,17 @@
             <tr>
                 <th scope="row">{{sum @index 1}}</th>
                 <td>{{this.name}}</td>
-                <td>{{this.createdAt}}</td>
+                <td>{{this.deletedAt}}</td>
                 <td>{{this.updatedAt}}</td>
-                <td><a href="/courses/{{this._id}}/edit" class="btn btn-link">Edit</a></td>
+                <td>
+                    <form method="POST" action="/courses/{{this._id}}/restore?_method=PATCH">
+                        <button type="submit" class="btn btn-link">Restore </button>
+                    </form>
+                </td>
                 <td>
                     <button type="button" class="btn btn-link text-danger" data-toggle="modal"
                         data-target="#deleteModal-{{this._id}}">
-                        Delete
+                        Delete Forever
                     </button>
                     <!-- Modal for this course -->
                     <div class="modal fade" id="deleteModal-{{this._id}}" tabindex="-1"
@@ -37,8 +41,8 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <form method="POST" action="/courses/{{this._id}}?_method=DELETE">
-                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    <form method="POST" action="/courses/{{this._id}}/force?_method=DELETE">
+                                        <button type="submit" class="btn btn-danger">Delete </button>
                                     </form>
                                 </div>
                             </div>

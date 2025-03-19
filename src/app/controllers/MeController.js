@@ -13,6 +13,17 @@ class MeController {
         }
     }
 
+    //[GET] /me/trash/courses
+    async trashCourses(req, res, next) {
+        try {
+            const courses = await Course.findWithDeleted({ deleted: true });
+            res.render('me/trash-courses', { courses: multipleMongooseToObject(courses) })
+        } catch (err) {
+            next(err);
+        }
+    }
+
+
 }
 
 module.exports = new MeController();
